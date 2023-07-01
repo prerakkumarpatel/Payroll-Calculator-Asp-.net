@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Payroll_Calculator.Models.PieceworkWorkerModel>
+
+@{
+    ViewData["Title"] = "Worker List";
+       int totalWorkers = 0;
+        int totalMessage = 0;
+         double totalPay = 0.0;
+
+}
+
+<h1>Workers List</h1>
+
+<table class="table ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                Pay
+            </th>
+            <th>
+                Senior Worker
+            </th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @item.GetPay().ToString("c")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSenior)
+            </td>
+                  <td>
+                    @Html.DisplayFor(modelItem => item.EntryDate)
+                </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        totalWorkers++;
+        totalMessage+=item.Message;
+        totalPay+= item.GetPay();
+        
+}
+@{totalPay=Math.Round(totalPay, 2, MidpointRounding.AwayFromZero);}
+
+    </tbody>
+</table>
+<p>
+    <a class="link text-primary" asp-controller="Worker" asp-action="Create">Create Worker </a>
+</p>
+ 
+<h5>Total Worker: @totalWorkers</h5>
+<h5>Total Message:@totalMessage</h5>
+<h5>Total Pay:@totalPay.ToString("c")</h5>
+
+
